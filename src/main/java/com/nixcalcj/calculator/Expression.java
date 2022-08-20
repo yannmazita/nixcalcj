@@ -104,4 +104,17 @@ public class Expression {
         ArrayList<Token> tokens = Tokenizer(postfixExpr.toString(), "post");
         return tokens;
     }
+
+    private int GetPrecedence(String operator1, String operator2){
+        char[] arr = {'^','1','*','2','/','2','+','3','-','3'};
+        char[] arrGetPrecedence = new char[2];
+        for (int i = 0; i < 10; i += 2){
+            if (operator1.equals(Character.toString(arr[i]))){
+                arrGetPrecedence[0] = arr[i + 1];
+            } else if (operator2.equals(Character.toString(arr[i]))){
+                arrGetPrecedence[1] = arr[i + 1];
+            }
+        }
+        return Character.compare(arrGetPrecedence[1], arrGetPrecedence[0]);
+    }
 }
