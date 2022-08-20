@@ -1,10 +1,21 @@
 package com.nixcalcj.calculator;
+import java.util.ArrayList;
 
 public class Expression {
     private String infixExpr;
     private StringBuffer postfixExpr = new StringBuffer();
     private StringBuffer tmpNumString = new StringBuffer();
     public boolean isIntegerOnly = true;
+    
+    private class Token{
+        public String str;
+        public char chr;
+        public Token(String inputString, char inputChar){
+            str = inputString;
+            chr = inputChar;
+        }
+    }
+
     public Expression(String inputExpr){
         infixExpr = inputExpr;
     }
@@ -51,5 +62,41 @@ public class Expression {
     private boolean IsUnaryMinus(String inputString, int curPos){
         return inputString.equals("-") && (curPos == 0 || infixExpr.charAt(curPos - 1) == '('
                 || IsOperator(Character.toString(infixExpr.charAt(curPos - 1))));
+    }
+
+    private ArrayList<Token> Tokenizer(String inputExpr, String type){
+        ArrayList<Token> tokens = new ArrayList<>();
+        int jumpIdx = 0;
+        for (int i = 0; i < inputExpr.length(); i++){
+            if (i < jumpIdx && i != 0){
+                continue;
+            }
+            if (IsOperator(Character.toString(inputExpr.charAt(i)))){
+                if (IsUnaryMinus(Character.toString(inputExpr.charAt(i)), i)){
+                    Token token = new Token(Character.toString(inputExpr.charAt(i)),'O');
+                    tokens.add(token);
+                }
+                else{
+                    Token token = new Token(Character.toString(inputExpr.charAt(i)),'o');
+                    tokens.add(token);
+                }
+            }
+            else if (inputExpr.charAt(i) == '(') {
+                Token token = new Token(Character.toString(inputExpr.charAt(i)),'l');
+                tokens.add(token);
+            }
+
+            else if (inputExpr.charAt(i) == ')') {
+                Token token = new Token(Character.toString(inputExpr.charAt(i)),'r');
+                tokens.add(token);
+            }
+            else if (Character.isDigit(inputExpr.charAt(i))){
+                jumpIdx = StoreNumber(i, type);
+                Token token = new Token(tmpNumString.toString(), 'n');
+                tokens.add(token);
+                ClearNumber();
+            }
+        }
+        return tokens;
     }
 }
