@@ -43,4 +43,8 @@ public class Expression {
 
         return inputString.equals("+") || inputString.equals("-") || inputString.equals("*");
     }
+
+    private boolean IsLeftAssociative(String oper){
+        return oper.equals("-") || oper.equals("/") || oper.equals("+") || oper.equals("*");
+    }
 }
