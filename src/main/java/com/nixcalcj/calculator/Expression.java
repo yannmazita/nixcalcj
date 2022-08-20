@@ -47,4 +47,9 @@ public class Expression {
     private boolean IsLeftAssociative(String oper){
         return oper.equals("-") || oper.equals("/") || oper.equals("+") || oper.equals("*");
     }
+
+    private boolean IsUnaryMinus(String inputString, int curPos){
+        return inputString.equals("-") && (curPos == 0 || infixExpr.charAt(curPos - 1) == '('
+                || IsOperator(Character.toString(infixExpr.charAt(curPos - 1))));
+    }
 }
