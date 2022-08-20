@@ -27,4 +27,8 @@ public class Expression {
         }
         return i;
     }
+
+    private void ClearNumber(){
+        tmpNumString.delete(0, tmpNumString.length() - 1);
+    }
 }
