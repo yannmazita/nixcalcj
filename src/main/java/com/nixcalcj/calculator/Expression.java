@@ -99,4 +99,9 @@ public class Expression {
         }
         return tokens;
     }
+
+    public ArrayList<Token> Tokenizer(){
+        ArrayList<Token> tokens = Tokenizer(postfixExpr.toString(), "post");
+        return tokens;
+    }
 }
