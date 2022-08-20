@@ -31,4 +31,16 @@ public class Expression {
     private void ClearNumber(){
         tmpNumString.delete(0, tmpNumString.length() - 1);
     }
+
+    private boolean IsOperator(String inputString){
+        if (inputString.equals("^") ||
+                inputString.equals("/") ||
+                inputString.equals("exp") ||
+                inputString.equals("ln")){
+            isIntegerOnly = false;
+            return true;
+        }
+
+        return inputString.equals("+") || inputString.equals("-") || inputString.equals("*");
+    }
 }
