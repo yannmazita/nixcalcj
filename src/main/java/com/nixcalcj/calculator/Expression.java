@@ -10,7 +10,7 @@ public class Expression {
     private StringBuffer tmpNumString = new StringBuffer();
     public boolean isIntegerOnly = true;
     
-    private class Token{
+    public class Token{
         public String str;
         public char chr;
         public Token(String inputString, char inputChar){
