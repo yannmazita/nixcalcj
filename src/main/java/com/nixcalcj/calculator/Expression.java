@@ -1,5 +1,8 @@
 package com.nixcalcj.calculator;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
 public class Expression {
     private String infixExpr;
@@ -116,5 +119,59 @@ public class Expression {
             }
         }
         return Character.compare(arrGetPrecedence[1], arrGetPrecedence[0]);
+    }
+
+    private Queue<String> BuildPostfixQueue() {
+        Queue<String> outputQueue = new LinkedList<>();
+        Stack<String> operatorStack = new Stack<>();
+        ArrayList<Token> tokens = Tokenizer(infixExpr, "in");
+
+        for (int i = 0; i < tokens.size(); i++){
+            if (tokens.get(i).chr == 'n'){
+                outputQueue.add(tokens.get(i).str);
+            }
+            else if (tokens.get(i).str.equals(Character.toString('o'))){
+                while( !(operatorStack.empty()) &&
+                        (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
+                        (GetPrecedence(operatorStack.peek(), tokens.get(i).str)==1 ||
+                                ((GetPrecedence(operatorStack.peek(), tokens.get(i).str)==0) &&
+                                        IsLeftAssociative(tokens.get(i).str)))){
+                    outputQueue.add(operatorStack.peek());
+                    operatorStack.pop();
+                }
+                operatorStack.add(tokens.get(i).str);
+            }
+            else if (tokens.get(i).str.equals(Character.toString('O'))){
+                outputQueue.add(Character.toString('0'));
+                while( !(operatorStack.empty()) &&
+                        (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
+                        (GetPrecedence(operatorStack.peek(), tokens.get(i).str)==1 ||
+                                ((GetPrecedence(operatorStack.peek(), tokens.get(i).str)==0) &&
+                                        IsLeftAssociative(tokens.get(i).str)))){
+                    outputQueue.add(operatorStack.peek());
+                    operatorStack.pop();
+                }
+                operatorStack.add(tokens.get(i).str);
+            }
+            else if (tokens.get(i).chr == 'l') {
+                operatorStack.add(tokens.get(i).str);
+            }
+            else if (tokens.get(i).chr == 'r'){
+                while (!operatorStack.empty() && !(operatorStack.peek().equals(Character.toString('(')))){
+                    outputQueue.add(operatorStack.peek());
+                    operatorStack.pop();
+                }
+                if (!operatorStack.empty() && !(operatorStack.peek().equals(Character.toString('(')))){
+                    operatorStack.pop();
+                }
+            }
+        }
+        while (!operatorStack.empty()){
+            if (operatorStack.peek().equals(Character.toString('('))){
+                outputQueue.add(operatorStack.peek());
+                operatorStack.pop();
+            }
+        }
+        return outputQueue;
     }
 }
