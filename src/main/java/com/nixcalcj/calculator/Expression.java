@@ -104,8 +104,7 @@ public class Expression {
     }
 
     public ArrayList<Token> Tokenizer(){
-        ArrayList<Token> tokens = Tokenizer(postfixExpr.toString(), "post");
-        return tokens;
+        return Tokenizer(postfixExpr.toString(), "post");
     }
 
     private int GetPrecedence(String operator1, String operator2){
