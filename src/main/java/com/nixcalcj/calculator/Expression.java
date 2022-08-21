@@ -173,4 +173,16 @@ public class Expression {
         }
         return outputQueue;
     }
+
+    public void BuildPostfixString(){
+        Queue<String> que = BuildPostfixQueue();
+        while (!que.isEmpty()){
+            postfixExpr.append(que.peek());
+            postfixExpr.append(" ");
+            que.remove();
+        }
+        if (postfixExpr.length() > 1){
+            postfixExpr.deleteCharAt(postfixExpr.length() - 1);
+        }
+    }
 }
