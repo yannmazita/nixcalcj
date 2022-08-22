@@ -1,5 +1,6 @@
 package com.nixcalcj.calculator;
 
+import java.beans.JavaBean;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -46,5 +47,58 @@ public class BinaryTree {
             }
         }
         return treeStack.peek();
+    }
+
+    private Number EvaluateExpressionTree(Node node){
+        if (node == null){
+            return 0;
+        }
+        if (node.left == null && node.right == null){
+            if (expr.isIntegerOnly){
+                return Long.parseLong(node.data);
+            }
+            else {
+                return Double.parseDouble(node.data);
+            }
+        }
+
+        Number leftOperand = EvaluateExpressionTree(node.left);
+        Number rightOperand = EvaluateExpressionTree(node.right);
+
+        if (node.data.equals(Character.toString('+'))){
+            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
+                return (Long)leftOperand + (Long)rightOperand;
+            }
+            else {
+                return (Double)leftOperand + (Double)rightOperand;
+            }
+        }
+        if (node.data.equals(Character.toString('-'))){
+            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
+                return (Long)leftOperand - (Long)rightOperand;
+            }
+            else {
+                return (Double)leftOperand - (Double)rightOperand;
+            }
+        }
+        if (node.data.equals(Character.toString('*'))){
+            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
+                return (Long)leftOperand * (Long)rightOperand;
+            }
+            else {
+                return (Double)leftOperand * (Double)rightOperand;
+            }
+        }
+        if (node.data.equals(Character.toString('/'))){
+            if (rightOperand.floatValue() == 0){
+                System.out.println("Division by zero");
+                return 0;
+            }
+            return (Double)leftOperand / (Double)rightOperand;
+        }
+        else if (node.data.equals(Character.toString('^'))){
+            return Math.pow((Double)leftOperand, (Double)rightOperand);
+        }
+        return 0;
     }
 }
