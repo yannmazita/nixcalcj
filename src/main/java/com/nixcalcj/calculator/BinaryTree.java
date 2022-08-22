@@ -101,4 +101,8 @@ public class BinaryTree {
         }
         return 0;
     }
+    public void ComputeAndDisplay(){
+        Node tree = BuildExpressionTree();
+        System.out.println(EvaluateExpressionTree(tree));
+    }
 }
