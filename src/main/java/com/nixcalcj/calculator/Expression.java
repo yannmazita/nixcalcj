@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
-public class Expression {
+class Expression {
     private String infixExpr;
     private StringBuffer postfixExpr = new StringBuffer();
     private StringBuffer tmpNumString = new StringBuffer();
@@ -43,7 +43,7 @@ public class Expression {
     }
 
     private void ClearNumber(){
-        tmpNumString.delete(0, tmpNumString.length() - 1);
+        tmpNumString.delete(0, tmpNumString.length());
     }
 
     private boolean IsOperator(String inputString){

@@ -1,21 +1,20 @@
 package com.nixcalcj.calculator;
 
-import java.beans.JavaBean;
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class BinaryTree {
-    private String inputExpr;
-    public BinaryTree(String inputEx){
-        inputExpr = inputEx;
+    private Expression expr;
+
+    public BinaryTree(String inputExpr){
+        expr = new Expression(inputExpr);
     }
-    private Expression expr = new Expression(inputExpr);
     private ArrayList<Expression.Token> tokens = new ArrayList<>();
 
     public class Node {
         String data;
-        Node left = new Node();
-        Node right = new Node();
+        Node left = null;
+        Node right = null;
     }
 
     private Node NewNode(String newData){
