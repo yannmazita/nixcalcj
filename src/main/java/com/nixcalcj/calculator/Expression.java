@@ -34,7 +34,7 @@ class Expression {
                 i++;
             }
         } else if (type.equals("post")){
-            while (i < postfixExpr.length() && (Character.isDigit(infixExpr.charAt(i)) || postfixExpr.charAt(i) == '.')){
+            while (i < postfixExpr.length() && (Character.isDigit(postfixExpr.charAt(i)) || postfixExpr.charAt(i) == '.')){
                 tmpNumString.append(postfixExpr.charAt(i));
                 i++;
             }
@@ -129,7 +129,7 @@ class Expression {
             if (tokens.get(i).chr == 'n'){
                 outputQueue.add(tokens.get(i).str);
             }
-            else if (tokens.get(i).str.equals(Character.toString('o'))){
+            else if (tokens.get(i).chr == 'o'){
                 while( !(operatorStack.empty()) &&
                         (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
                         (GetPrecedence(operatorStack.peek(), tokens.get(i).str)==1 ||
@@ -140,7 +140,7 @@ class Expression {
                 }
                 operatorStack.add(tokens.get(i).str);
             }
-            else if (tokens.get(i).str.equals(Character.toString('O'))){
+            else if (tokens.get(i).chr == 'O'){
                 outputQueue.add(Character.toString('0'));
                 while( !(operatorStack.empty()) &&
                         (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
@@ -156,17 +156,17 @@ class Expression {
                 operatorStack.add(tokens.get(i).str);
             }
             else if (tokens.get(i).chr == 'r'){
-                while (!operatorStack.empty() && !(operatorStack.peek().equals(Character.toString('(')))){
+                while (!(operatorStack.empty()) && !(operatorStack.peek().equals(Character.toString('(')))){
                     outputQueue.add(operatorStack.peek());
                     operatorStack.pop();
                 }
-                if (!operatorStack.empty() && !(operatorStack.peek().equals(Character.toString('(')))){
+                if (!(operatorStack.empty()) && !(operatorStack.peek().equals(Character.toString('(')))){
                     operatorStack.pop();
                 }
             }
         }
-        while (!operatorStack.empty()){
-            if (operatorStack.peek().equals(Character.toString('('))){
+        while (!(operatorStack.empty())){
+            if (!operatorStack.peek().equals(Character.toString('('))){
                 outputQueue.add(operatorStack.peek());
                 operatorStack.pop();
             }
@@ -176,7 +176,7 @@ class Expression {
 
     public void BuildPostfixString(){
         Queue<String> que = BuildPostfixQueue();
-        while (!que.isEmpty()){
+        while (!(que.isEmpty())){
             postfixExpr.append(que.peek());
             postfixExpr.append(" ");
             que.remove();
