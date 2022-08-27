@@ -160,7 +160,7 @@ class Expression {
                     outputQueue.add(operatorStack.peek());
                     operatorStack.pop();
                 }
-                if (!(operatorStack.empty()) && !(operatorStack.peek().equals(Character.toString('(')))){
+                if (!(operatorStack.empty()) && operatorStack.peek().equals(Character.toString('('))){
                     operatorStack.pop();
                 }
             }
