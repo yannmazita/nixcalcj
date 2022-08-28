@@ -75,12 +75,18 @@ class Expression {
                 continue;
             }
             if (IsOperator(Character.toString(inputExpr.charAt(i)))){
-                if (IsUnaryMinus(Character.toString(inputExpr.charAt(i)), i)){
-                    Token token = new Token(Character.toString(inputExpr.charAt(i)),'O');
-                    tokens.add(token);
+                if (type.equals("in")){
+                    if (IsUnaryMinus(Character.toString(inputExpr.charAt(i)), i)) {
+                        Token token = new Token(Character.toString(inputExpr.charAt(i)), 'O');
+                        tokens.add(token);
+                    }
+                    else {
+                        Token token = new Token(Character.toString(inputExpr.charAt(i)), 'o');
+                        tokens.add(token);
+                    }
                 }
-                else{
-                    Token token = new Token(Character.toString(inputExpr.charAt(i)),'o');
+                else {
+                    Token token = new Token(Character.toString(inputExpr.charAt(i)), 'o');
                     tokens.add(token);
                 }
             }
