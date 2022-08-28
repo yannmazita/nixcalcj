@@ -17,6 +17,11 @@ public class BinaryTree {
         Node right = null;
     }
 
+    /**
+     * Create new node.
+     * @param newData the data to be stored in the node.
+     * @return reference to the new node.
+     */
     private Node NewNode(String newData){
         Node node = new Node();
         node.data = newData;
@@ -24,6 +29,14 @@ public class BinaryTree {
         node.right = null;
         return node;
     }
+
+    /**
+     * Build (binary) expression tree.
+     * This method builds an expression with each node being either an operator or an operand. Each node is made of
+     * a reference to an instance of the Node class. Each Node instance has a 'data' string, a reference to the left
+     * child and a reference to the right child (references to Node instances).
+     * @return a reference to the root of the tree.
+     */
     private Node BuildExpressionTree(){
         expr.BuildPostfixString();
         tokens = expr.Tokenizer();
@@ -48,6 +61,13 @@ public class BinaryTree {
         return treeStack.peek();
     }
 
+
+    /**
+     * Evaluate (binary) expression tree.
+     * This method evaluates an expression tree by going through it in preorder.
+     * @param node root node for the evaluation.
+     * @return Number the result of the evaluation.
+     */
     private Number EvaluateExpressionTree(Node node){
         if (node == null){
             return 0;
@@ -100,6 +120,10 @@ public class BinaryTree {
         }
         return 0;
     }
+
+    /**
+     * Compute and send result to stdout.
+     */
     public void ComputeAndDisplay(){
         Node tree = BuildExpressionTree();
         System.out.println(EvaluateExpressionTree(tree));
