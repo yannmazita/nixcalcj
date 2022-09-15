@@ -191,6 +191,40 @@ class Expression {
     }
 
     /**
+     * Check expression for any syntax error.
+     * @param tokens Array of expression tokens.
+     * @return true if there is any syntax error, false otherwise.
+     */
+    public boolean SyntaxCheck(ArrayList<Token> tokens){
+        int parenthesisDelta = 0;   /** Delta used to check for mismatched parentheses. */
+        Token lastToken = new Token("aa", 'a');
+        for (Token token : tokens){
+            if (token.str.equals(Character.toString('('))){
+                parenthesisDelta--;
+            }
+            else if (token.str.equals(Character.toString(')'))){
+                parenthesisDelta++;
+            }
+            if (parenthesisDelta > 0){
+                // Mismatched right pare,thesis will trigger this condition.
+                return true;
+            }
+            if (lastToken.equals(token) && (lastToken.chr != 'l' || lastToken.chr != 'r' || lastToken.chr != 'n')){
+                // Repeating operators (not parentheses) will trigger this condition.
+                return true;
+            }
+            else {
+                lastToken = token;
+            }
+        }
+        if (parenthesisDelta != 0){
+            // Missing left or right parenthesis.
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Build postfix mathematical expression from infix expression.
      * @return queue of the converted expression.
      */
@@ -199,50 +233,51 @@ class Expression {
         Stack<String> operatorStack = new Stack<>();
         ArrayList<Token> tokens = Tokenizer(infixExpr, "in");
 
-        for (int i = 0; i < tokens.size(); i++){
-            if (tokens.get(i).chr == 'n'){
-                outputQueue.add(tokens.get(i).str);
-            }
-            else if (tokens.get(i).chr == 'o'){
-                while( !(operatorStack.empty()) &&
-                        (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
-                        (GetPrecedence(operatorStack.peek(), tokens.get(i).str)==1 ||
-                                ((GetPrecedence(operatorStack.peek(), tokens.get(i).str)==0) &&
-                                        IsLeftAssociative(tokens.get(i).str)))){
-                    outputQueue.add(operatorStack.peek());
-                    operatorStack.pop();
-                }
-                operatorStack.add(tokens.get(i).str);
-            }
-            else if (tokens.get(i).chr == 'O'){
-                outputQueue.add(Character.toString('0'));
-                while( !(operatorStack.empty()) &&
-                        (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
-                        (GetPrecedence(operatorStack.peek(), tokens.get(i).str)==1 ||
-                                ((GetPrecedence(operatorStack.peek(), tokens.get(i).str)==0) &&
-                                        IsLeftAssociative(tokens.get(i).str)))){
-                    outputQueue.add(operatorStack.peek());
-                    operatorStack.pop();
-                }
-                operatorStack.add(tokens.get(i).str);
-            }
-            else if (tokens.get(i).chr == 'l') {
-                operatorStack.add(tokens.get(i).str);
-            }
-            else if (tokens.get(i).chr == 'r'){
-                while (!(operatorStack.empty()) && !(operatorStack.peek().equals(Character.toString('(')))){
-                    outputQueue.add(operatorStack.peek());
-                    operatorStack.pop();
-                }
-                if (!(operatorStack.empty()) && operatorStack.peek().equals(Character.toString('('))){
-                    operatorStack.pop();
-                }
-            }
+        if (SyntaxCheck(tokens)) {
+            outputQueue.add(Character.toString(' '));
         }
-        while (!(operatorStack.empty())){
-            if (!operatorStack.peek().equals(Character.toString('('))){
-                outputQueue.add(operatorStack.peek());
-                operatorStack.pop();
+        else {
+            for (int i = 0; i < tokens.size(); i++) {
+                if (tokens.get(i).chr == 'n') {
+                    outputQueue.add(tokens.get(i).str);
+                } else if (tokens.get(i).chr == 'o') {
+                    while (!(operatorStack.empty()) &&
+                            (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
+                            (GetPrecedence(operatorStack.peek(), tokens.get(i).str) == 1 ||
+                                    ((GetPrecedence(operatorStack.peek(), tokens.get(i).str) == 0) &&
+                                            IsLeftAssociative(tokens.get(i).str)))) {
+                        outputQueue.add(operatorStack.peek());
+                        operatorStack.pop();
+                    }
+                    operatorStack.add(tokens.get(i).str);
+                } else if (tokens.get(i).chr == 'O') {
+                    outputQueue.add(Character.toString('0'));
+                    while (!(operatorStack.empty()) &&
+                            (IsOperator(operatorStack.peek())) && !(operatorStack.peek().equals(Character.toString('('))) &&
+                            (GetPrecedence(operatorStack.peek(), tokens.get(i).str) == 1 ||
+                                    ((GetPrecedence(operatorStack.peek(), tokens.get(i).str) == 0) &&
+                                            IsLeftAssociative(tokens.get(i).str)))) {
+                        outputQueue.add(operatorStack.peek());
+                        operatorStack.pop();
+                    }
+                    operatorStack.add(tokens.get(i).str);
+                } else if (tokens.get(i).chr == 'l') {
+                    operatorStack.add(tokens.get(i).str);
+                } else if (tokens.get(i).chr == 'r') {
+                    while (!(operatorStack.empty()) && !(operatorStack.peek().equals(Character.toString('(')))) {
+                        outputQueue.add(operatorStack.peek());
+                        operatorStack.pop();
+                    }
+                    if (!(operatorStack.empty()) && operatorStack.peek().equals(Character.toString('('))) {
+                        operatorStack.pop();
+                    }
+                }
+            }
+            while (!(operatorStack.empty())) {
+                if (!operatorStack.peek().equals(Character.toString('('))) {
+                    outputQueue.add(operatorStack.peek());
+                    operatorStack.pop();
+                }
             }
         }
         return outputQueue;
