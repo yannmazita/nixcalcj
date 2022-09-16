@@ -1,7 +1,9 @@
 package com.nixcalcj.calculator;
-
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Stack;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class BinaryTree {
     private Expression expr;
@@ -68,57 +70,68 @@ public class BinaryTree {
      * @param node root node for the evaluation.
      * @return Number the result of the evaluation.
      */
-    private Number EvaluateExpressionTree(Node node){
+    private String EvaluateExpressionTree(Node node){
         if (node == null){
-            return 0;
+            return "0";
         }
         if (node.left == null && node.right == null){
-            if (expr.isIntegerOnly){
-                return Long.parseLong(node.data);
-            }
-            else {
-                return Double.parseDouble(node.data);
-            }
+            return node.data;
         }
 
-        Number leftOperand = EvaluateExpressionTree(node.left);
-        Number rightOperand = EvaluateExpressionTree(node.right);
+        String leftOperand = EvaluateExpressionTree(node.left);
+        String rightOperand = EvaluateExpressionTree(node.right);
 
         if (node.data.equals(Character.toString('+'))){
-            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
-                return (Long)leftOperand + (Long)rightOperand;
+            if (expr.isIntegerOnly){
+                BigInteger left = new BigInteger(leftOperand);
+                BigInteger right = new BigInteger(rightOperand);
+                return left.add(right).toString();
             }
             else {
-                return (Double)leftOperand + (Double)rightOperand;
+                BigDecimal left = new BigDecimal(leftOperand);
+                BigDecimal right = new BigDecimal(rightOperand);
+                return left.add(right).toString();
             }
         }
         if (node.data.equals(Character.toString('-'))){
-            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
-                return (Long)leftOperand - (Long)rightOperand;
+            if (expr.isIntegerOnly){
+                BigInteger left = new BigInteger(leftOperand);
+                BigInteger right = new BigInteger(rightOperand);
+                return left.subtract(right).toString();
             }
             else {
-                return (Double)leftOperand - (Double)rightOperand;
+                BigDecimal left = new BigDecimal(leftOperand);
+                BigDecimal right = new BigDecimal(rightOperand);
+                return left.subtract(right).toString();
             }
         }
         if (node.data.equals(Character.toString('*'))){
-            if ((leftOperand instanceof Long) || ((rightOperand instanceof Long))){
-                return (Long)leftOperand * (Long)rightOperand;
+            if (expr.isIntegerOnly){
+                BigInteger left = new BigInteger(leftOperand);
+                BigInteger right = new BigInteger(rightOperand);
+                return left.multiply(right).toString();
             }
             else {
-                return (Double)leftOperand * (Double)rightOperand;
+                BigDecimal left = new BigDecimal(leftOperand);
+                BigDecimal right = new BigDecimal(rightOperand);
+                return left.multiply(right).toString();
             }
         }
         if (node.data.equals(Character.toString('/'))){
-            if (rightOperand.floatValue() == 0){
+            if (rightOperand.equals("0")){
                 System.out.println("Division by zero");
-                return 0;
+                return "0";
             }
-            return (Double)leftOperand / (Double)rightOperand;
+            BigDecimal left = new BigDecimal(leftOperand);
+            BigDecimal right = new BigDecimal(rightOperand);
+            return left.divide(right, RoundingMode.CEILING).toString();
         }
         else if (node.data.equals(Character.toString('^'))){
-            return Math.pow((Double)leftOperand, (Double)rightOperand);
+            BigDecimal left = new BigDecimal(leftOperand);
+            int right = (new BigDecimal(rightOperand)).intValueExact();
+            return left.pow(right).toString();
         }
-        return 0;
+        return "0";
     }
 
     /**
