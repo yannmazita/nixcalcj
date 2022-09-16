@@ -1,4 +1,5 @@
 package com.nixcalcj.calculator;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -124,7 +125,7 @@ public class BinaryTree {
             }
             BigDecimal left = new BigDecimal(leftOperand);
             BigDecimal right = new BigDecimal(rightOperand);
-            return left.divide(right, RoundingMode.CEILING).toString();
+            return left.divide(right, new MathContext(16)).toString();
         }
         else if (node.data.equals(Character.toString('^'))){
             BigDecimal left = new BigDecimal(leftOperand);
